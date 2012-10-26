@@ -35,18 +35,26 @@ def R(p, T, m):
     return Mm(p, m) * np.exp(arg) - Mp(p, m) * np.exp(-arg)
 
 def oneoN(p, T, m):
+    #print A(p,m), np.sinh(w(p,m)), R(p,T,m), w(p,m)
     return 2. * A(p, m) * np.sinh(w(p, m)) * R(p, T, m)
 
 def sqrtN(p, T, m):
+    #print np.sqrt(1. / oneoN(p, T, m))
     return np.sqrt(1. / oneoN(p, T, m))
 
 def f1(p, t, T, m):
     arg = w(p, m) * t
+    if np.linalg.norm(p) < 1e-7 and m == 0:
+        return t
+        #print sqrtN(p, T, m) * (np.exp(arg) - np.exp(-arg)),p[0],t,T,m,"f1"
     return sqrtN(p, T, m) * (np.exp(arg) - np.exp(-arg))
 
 
 def f2(p, t, T, m):
     arg = w(p, m) * t
+    if np.linalg.norm(p) < 1e-7 and m == 0:
+        return 1
+        #print sqrtN(p, T, m) * (Mm(p, m) * np.exp(arg) - Mp(p, m) * np.exp(-arg)), p[0],t,T,m,"f2"
     return sqrtN(p, T, m) * (Mm(p, m) * np.exp(arg) - Mp(p, m) * np.exp(-arg))
 
 def Gp(p, x, y, T, m):
