@@ -5,7 +5,10 @@ These scirpts calculate tree level improvement of observables as
 descibed by Divitiis et al. (*ALPHA* collaboration) in
 hep-lat/9411017. The observables in observables.py are named as in
 arXiv:1001.4783 (Blossier et al. for the *ALPHA* collaboration) and
-the references therein.
+the references therein. 
+
+DO NOT FORGET TO CITE THE SOURCES ABOVE IN PUBLICATIONS OF ANY FORM!
+
 
 Files
 -----
