@@ -5,18 +5,6 @@ import numpy as np
 from observables import R1
 ERR = 1e-10 # estimate of the round-off error for correlation fns.
 
-def set_lambda(L):
-    """Function to set the parameter Lambda/M form outside the
-    script."""
-    LL = L
-def set_nf(N):
-    """Function to set the parameter Lambda/M form outside the
-    script."""
-    NF = N
-    B0 = 1. / (4 * pi)**2 * (11 - 2./3 * NF)
-    B1 = 1. / (4 * pi)**4 * (102 - 38./3 * NF)
-
-
 ############################################################
 # Helper functions to calculate m_bare
 ############################################################
@@ -67,6 +55,8 @@ def tli(obs, args, Lrange, n_cut, lrange, x_val, z):
     cl, dcl = cl1, abs(cl1-cl2)
     if abs(cl) < 10*abs(dcl):
         print " ** WARNING,", obs.__name__, "seems to vanish as a/L -> 0"
+        print " ** My estimate: {0} --> {1} as a/L --> 0".format(
+            obs.__name__, pretty_print(cl, dcl))
         print " ** using delta = O(a/L) - O(0) for", obs.__name__
         print " ** for argument", args
         delta_fun = lambda x : x - cl
