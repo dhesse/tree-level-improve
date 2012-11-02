@@ -26,13 +26,15 @@ def fX(L, T, x0, m, gam, thetah, thetal, gamp = g5):
 
 
 def fA(L, T, x0, m, thetah, thetal):
-    return fX(L, T, x0, m, gamma[0] * g5, thetah, thetal)
+    b_coeff = (3./2 - 0.5*sqrt(1 - 2.* m))
+    return fX(L, T, x0, m, gamma[0] * g5, thetah, thetal)*b_coeff
 
 def fP(L, T, x0, m, thetah, thetal):
     return fX(L, T, x0, m,  g5, thetah, thetal)
 
 def kv(L, T, x0, m, thetah, thetal):
-    return fX(L, T, x0, m,  gamma[1], thetah, thetal, gamma[1])
+    b_coeff = (3./2 - 0.5*sqrt(1 - 2.* m))
+    return fX(L, T, x0, m,  gamma[1], thetah, thetal, gamma[1])*b_coeff
 
 def f1(L, T, m, thetah, thetal):
     """f1, heavy light version"""
