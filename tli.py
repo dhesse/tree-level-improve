@@ -26,7 +26,10 @@ def min_x(z, LL = 0.195, NF = 0):
                exp(-x**(-2. * B0 / D0)))
 
 def pretty_print(val, err, extra_err_digits = 1):
-    digits = 1 + int(-log(err, 10)) + extra_err_digits
+    if err == 0.0:
+        assert val == 0.0
+        return "0(0)"
+    digits = 1 + int(abs(log(err, 10))) + extra_err_digits
     err = int(err * 10 ** digits + 0.5)
     if err == 10 and extra_err_digits != 1:
         err = 1
@@ -64,7 +67,8 @@ def tli(obs, args, Lrange, n_cut, lrange, x_val, z):
     else:
         delta_fun = lambda x : (x - cl) / cl
         d_delta_fun = lambda dO, O, de : \
-            ((dO + dcl)/abs(O-cl) + dcl/abs(cl))*abs(de)
+            ((dO + dcl)/abs(O-cl) + dcl/abs(cl))*abs(de)\
+            if O != cl else 0.0
     # the observable at lattice sizes given in lragne
     Obs = [obs(L, x_val, z, *args) for L in lrange]
     # the estimate error on the observables
@@ -105,5 +109,3 @@ if __name__ == "__main__":
         # print tli
         for L, d, dd in zip(lrange, delta, d_delta):
             print "   ", L, pretty_print(d,dd)
-
-    
