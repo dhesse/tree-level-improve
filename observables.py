@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+:mod:`observables` -- Various tree level observables in the SF.
+=================================================================
+
+.. module: observables
+
+
+Note that the documentation for now only covers the primary
+observables contained in this module.
+"""
+
 from propagator import Sf
 from dirac import g5, Pp, gamma, Pm
 from math import sqrt, log
@@ -15,8 +27,27 @@ def mb(x, z, L):
 ############################################################
 
 def fX(L, T, x0, m, gam, thetah, thetal, gamp = g5):
-    """Template for heavy light correlation functions a la fA, fP, kV
-    etc."""
+    r"""Template for tree level heavy light boundary-to-bulk
+    correlation functions of the form
+    
+    .. math::
+
+      f_{\Gamma, \Gamma'}(x_0, \theta_{\mathrm h}, \theta_{\mathrm l},
+      z) = \frac {a^6} 2 \sum_{\mathbf y, \mathbf z}
+      \langle \psi_{\mathrm h}(x) \Gamma \overline \psi_{\mathrm l}(x)
+       \overline \zeta_{\mathrm h}(\mathbf y) \Gamma'
+       \zeta_{\mathrm l}(\mathbf z)
+      \rangle
+
+    :param L: Spatial lattice extent.
+    :param T: Temporal lattice extent.
+    :param x0: Position of the first spin matrix insertion.
+    :param m: Bare mass of heavy quark.
+    :param gam: First spin matrix insertion.
+    :param thetah: Phase angle of the heavy quark.
+    :param thetal: Phase angle of the light quark.
+    :param gamp: Spin matrix insertion at the boundary.
+    """
     pl = np.array([float(thetal)/L,]*3)
     ph = np.array([float(thetah)/L,]*3)
     Sh = lambda x, y : Sf(ph, x, y, T, m)
@@ -25,19 +56,41 @@ def fX(L, T, x0, m, gam, thetah, thetal, gamp = g5):
                            Pp * gamp * Sl(1, x0) * gam).real
 
 def fA(L, T, x0, m, thetah, thetal):
+    """Correlation function :math:`f_A`, based on :class:`fX`."""
     b_coeff = (3./2 - 0.5*sqrt(1 - 2.* m))
     return fX(L, T, x0, m, gamma[0] * g5, thetah, thetal)*b_coeff
 
 def fP(L, T, x0, m, thetah, thetal):
+    """Correlation function :math:`f_P`, based on :class:`fX`."""
     b_coeff = (3./2 - 0.5*sqrt(1 - 2.* m))
     return fX(L, T, x0, m, g5, thetah, thetal)*b_coeff
 
 def kv(L, T, x0, m, thetah, thetal):
+    """Correlation function :math:`k_V`, based on :class:`fX`."""
     b_coeff = (3./2 - 0.5*sqrt(1 - 2.* m))
     return fX(L, T, x0, m, gamma[1], thetah, thetal, gamma[1])*b_coeff
 
 def f1(L, T, m, thetah, thetal):
-    """f1, heavy light version"""
+    r"""Template for the tree level heavy light boundary-to-boundary
+    correlation
+    
+    .. math::
+
+      f_1(\theta_{\mathrm h}, \theta_{\mathrm l}, z)
+      = -\frac {a^{12}} {2L^6} \sum_{\mathbf y_1, \mathbf y_2, \mathbf
+      y_3, \mathbf y_4}
+      \langle \overline \zeta'_{\mathrm l}(\mathbf y_1) \gamma_5
+       \zeta_{\mathrm h}(\mathbf y_2)
+       \overline \zeta_{\mathrm h}(\mathbf y_3) \gamma_5
+      \zeta_{\mathrm l}(\mathbf y_4)
+      \rangle
+
+    :param L: Spatial lattice extent.
+    :param T: Temporal lattice extent.
+    :param m: Bare mass of heavy quark.
+    :param thetah: Phase angle of the heavy quark.
+    :param thetal: Phase angle of the light quark.
+    """
     pl = np.array([float(thetal)/L,]*3)
     ph = np.array([float(thetah)/L,]*3)
     Sh = lambda x, y : Sf(ph, x, y, T, m)
@@ -46,8 +99,8 @@ def f1(L, T, m, thetah, thetal):
                            Sh(T-1, 1) * g5 * Pm).real
 
 def fXstat(L, T, x0, gam, thetal, gamp = g5):
-    """Template for heavy light correlation functions a la fA, fP, kV
-    etc."""
+    """Template for static light correlation functions a la fA, fP, kV
+    etc.. Behaves like :class:`fX`."""
     pl = np.array([float(thetal)/L,]*3)
     Sh = lambda x, y : Pp
     Sl = lambda x, y : Sf(pl, x, y, T, 0)
@@ -55,10 +108,13 @@ def fXstat(L, T, x0, gam, thetal, gamp = g5):
                            Pp * gamp * Sl(1, x0) * gam).real
 
 def fAstat(L, T, x0, thetal):
+    r"""Correltaion function :math:`f_\mathrm{A}^\mathrm{stat}`, based
+    on :class:`fXstat`."""
     return fXstat(L, T, x0, gamma[0] * g5, thetal)
 
 def f1stat(L, T, thetal):
-    """f1, static light version"""
+    r"""Correltaion function :math:`f_1^\mathrm{stat}`, see
+    :class:`f1`."""
     pl = np.array([float(thetal)/L,]*3)
     Sh = lambda x, y : Pp
     Sl = lambda x, y : Sf(pl, x, y, T, 0)

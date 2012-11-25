@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+:mod:`propagator` -- Tree level propagator.
+====================================================
+
+The tree level propagator is implemented here.
+"""
 import numpy as np
 from dirac import Pp, Pm, gamma
 
@@ -85,9 +92,25 @@ def Hm(p, x, y, T, m):
     return f2(p, x, T, m) * f2(p, (T - y), T, m)
 
 
-def Sf(p, x, y, T, m = 0.):
-    result = Pp * Hp(p, x, y, T, m) + Pm * Hm(p, x, y, T, m) + 1J
-    tmp = (Pp * Gp(p, x, y, T, m) + Pm * Gm(p, x, y, T, m))
+def Sf(p, t, u, T, m = 0.):
+    r"""Tree level fermion propagator in the Schrödinger functional
+    with an Abelian background field in the time-momentum
+    representation
+
+    .. math::
+
+      S_{\mathbf p}(t,u) = (D^{(0)} + m)^{-1}\,,
+      
+    where :math:`D + m` is the Dirac operator.
+
+    :param t: Initial time.
+    :param u: Final time.
+    :param p: Spatial momentum. Phase angles must be included here.
+    :param T: Lattice extent.
+    :param m: Bare mass.
+    """
+    result = Pp * Hp(p, t, u, T, m) + Pm * Hm(p, t, u, T, m) + 1J
+    tmp = (Pp * Gp(p, t, u, T, m) + Pm * Gm(p, t, u, T, m))
     for k in range(1,4):
         result -= 1J* gamma[k] * ring(p[k-1]) * tmp
     return result;
